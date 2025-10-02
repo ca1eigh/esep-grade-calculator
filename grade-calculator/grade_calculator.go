@@ -9,48 +9,31 @@ type GradeCalculator struct {
 type GradeType int
 
 const (
-	Assignment GradeType = iota
-	Exam
-	Essay
+    Assignment GradeType = iota
+    Exam
+    Essay
 )
 
 var gradeTypeName = map[GradeType]string{
-	Assignment: "assignment",
-	Exam:       "exam",
-	Essay:      "essay",
+    Assignment: "assignment",
+    Exam:       "exam",
+    Essay:      "essay",
 }
 
 func (gt GradeType) String() string {
-	return gradeTypeName[gt]
+    return gradeTypeName[gt]
 }
 
 type Grade struct {
-	Name  string
-	Grade int
-	Type  GradeType
+    Name  string
+    Grade int
+    Type  GradeType
 }
-
 
 func NewGradeCalculator() *GradeCalculator {
     return &GradeCalculator{
         grades: make([]Grade, 0),
     }
-}
-
-func (gc *GradeCalculator) GetFinalGrade() string {
-	numericalGrade := gc.calculateNumericalGrade()
-
-	if numericalGrade >= 90 {
-		return "A"
-	} else if numericalGrade >= 80 {
-		return "B"
-	} else if numericalGrade >= 70 {
-		return "C"
-	} else if numericalGrade >= 60 {
-		return "D"
-	}
-
-	return "F"
 }
 
 func (gc *GradeCalculator) AddGrade(name string, grade int, gradeType GradeType) {
@@ -61,6 +44,28 @@ func (gc *GradeCalculator) AddGrade(name string, grade int, gradeType GradeType)
     })
 }
 
+func (gc *GradeCalculator) GetFinalGrade() string {
+    numericalGrade := gc.calculateNumericalGrade()
+
+    if numericalGrade >= 90 {
+        return "A"
+    } else if numericalGrade >= 80 {
+        return "B"
+    } else if numericalGrade >= 70 {
+        return "C"
+    } else if numericalGrade >= 60 {
+        return "D"
+    }
+    return "F"
+}
+
+// New method for Pass/Fail support
+func (gc *GradeCalculator) IsPassFail() string {
+    if gc.calculateNumericalGrade() >= 70 {
+        return "Pass"
+    }
+    return "Fail"
+}
 
 func (gc *GradeCalculator) calculateNumericalGrade() int {
     var assignments, exams, essays []Grade
@@ -75,8 +80,8 @@ func (gc *GradeCalculator) calculateNumericalGrade() int {
             essays = append(essays, g)
         }
     }
-	
-	assignmentAvg := computeAverage(assignments)
+
+    assignmentAvg := computeAverage(assignments)
     examAvg := computeAverage(exams)
     essayAvg := computeAverage(essays)
 
@@ -93,6 +98,5 @@ func computeAverage(grades []Grade) int {
     for _, g := range grades {
         sum += g.Grade
     }
-
     return sum / len(grades)
 }
