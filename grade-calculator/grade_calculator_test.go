@@ -3,87 +3,71 @@ package esepunittests
 import "testing"
 
 func TestGetGradeA(t *testing.T) {
-	expected_value := "A"
+    gc := NewGradeCalculator()
+    gc.AddGrade("assignment", 100, Assignment)
+    gc.AddGrade("exam", 100, Exam)
+    gc.AddGrade("essay", 100, Essay)
 
-	gradeCalculator := NewGradeCalculator()
-
-	gradeCalculator.AddGrade("open source assignment", 100, Assignment)
-	gradeCalculator.AddGrade("exam 1", 100, Exam)
-	gradeCalculator.AddGrade("essay on ai ethics", 100, Essay)
-
-	actual_value := gradeCalculator.GetFinalGrade()
-
-	if expected_value != actual_value {
-		t.Errorf("Expected GetGrade to return '%s'; got '%s' instead", expected_value, actual_value)
-	}
+    if gc.GetFinalGrade() != "A" {
+        t.Errorf("Expected 'A', got '%s'", gc.GetFinalGrade())
+    }
 }
 
 func TestGetGradeB(t *testing.T) {
-	expected_value := "B"
+    gc := NewGradeCalculator()
+    gc.AddGrade("assignment", 80, Assignment)
+    gc.AddGrade("exam", 81, Exam)
+    gc.AddGrade("essay", 85, Essay)
 
-	gradeCalculator := NewGradeCalculator()
-
-	gradeCalculator.AddGrade("open source assignment", 80, Assignment)
-	gradeCalculator.AddGrade("exam 1", 81, Exam)
-	gradeCalculator.AddGrade("essay on ai ethics", 85, Essay)
-
-	actual_value := gradeCalculator.GetFinalGrade()
-
-	if expected_value != actual_value {
-		t.Errorf("Expected GetGrade to return '%s'; got '%s' instead", expected_value, actual_value)
-	}
+    if gc.GetFinalGrade() != "B" {
+        t.Errorf("Expected 'B', got '%s'", gc.GetFinalGrade())
+    }
 }
 
-
 func TestGetGradeC(t *testing.T) {
-    gradeCalculator := NewGradeCalculator()
-    gradeCalculator.AddGrade("assignment", 70, Assignment)
-    gradeCalculator.AddGrade("exam", 70, Exam)
-    gradeCalculator.AddGrade("essay", 70, Essay)
+    gc := NewGradeCalculator()
+    gc.AddGrade("assignment", 70, Assignment)
+    gc.AddGrade("exam", 70, Exam)
+    gc.AddGrade("essay", 70, Essay)
 
-    if gradeCalculator.GetFinalGrade() != "C" {
-        t.Errorf("Expected 'C', got '%s'", gradeCalculator.GetFinalGrade())
+    if gc.GetFinalGrade() != "C" {
+        t.Errorf("Expected 'C', got '%s'", gc.GetFinalGrade())
     }
 }
 
 func TestGetGradeD(t *testing.T) {
-    gradeCalculator := NewGradeCalculator()
-    gradeCalculator.AddGrade("assignment", 60, Assignment)
-    gradeCalculator.AddGrade("exam", 60, Exam)
-    gradeCalculator.AddGrade("essay", 60, Essay)
+    gc := NewGradeCalculator()
+    gc.AddGrade("assignment", 60, Assignment)
+    gc.AddGrade("exam", 60, Exam)
+    gc.AddGrade("essay", 60, Essay)
 
-    if gradeCalculator.GetFinalGrade() != "D" {
-        t.Errorf("Expected 'D', got '%s'", gradeCalculator.GetFinalGrade())
+    if gc.GetFinalGrade() != "D" {
+        t.Errorf("Expected 'D', got '%s'", gc.GetFinalGrade())
     }
 }
 
 func TestGetGradeF(t *testing.T) {
-	expected_value := "F"
+    gc := NewGradeCalculator()
+    gc.AddGrade("assignment", 60, Assignment)
+    gc.AddGrade("exam", 51, Exam)
+    gc.AddGrade("essay", 45, Essay)
 
-	gradeCalculator := NewGradeCalculator()
-
-	gradeCalculator.AddGrade("open source assignment", 60, Assignment)
-	gradeCalculator.AddGrade("exam 1", 51, Exam)
-	gradeCalculator.AddGrade("essay on ai ethics", 45, Essay)
-
-	actual_value := gradeCalculator.GetFinalGrade()
-
-	if expected_value != actual_value {
-		t.Errorf("Expected GetGrade to return '%s'; got '%s' instead", expected_value, actual_value)
-	}
-}
-
-// Test adding grades correctly
-func TestAddGradeAssignment(t *testing.T) {
-    gradeCalculator := NewGradeCalculator()
-    gradeCalculator.AddGrade("assignment", 100, Assignment)
-
-    if len(gradeCalculator.assignments) != 1 {
-        t.Errorf("Expected 1 assignment, got %d", len(gradeCalculator.assignments))
+    if gc.GetFinalGrade() != "F" {
+        t.Errorf("Expected 'F', got '%s'", gc.GetFinalGrade())
     }
 }
 
-// Test Grade Type String function
+func TestAddGrade(t *testing.T) {
+    gc := NewGradeCalculator()
+    gc.AddGrade("assignment", 100, Assignment)
+    gc.AddGrade("exam", 90, Exam)
+    gc.AddGrade("essay", 80, Essay)
+
+    if len(gc.grades) != 3 {
+        t.Errorf("Expected 3 grades, got %d", len(gc.grades))
+    }
+}
+
 func TestGradeTypeString(t *testing.T) {
     tests := map[GradeType]string{
         Assignment: "assignment",
@@ -98,10 +82,8 @@ func TestGradeTypeString(t *testing.T) {
     }
 }
 
-// Test compute average return 0 line
 func TestComputeAverageEmptySlice(t *testing.T) {
     var emptyGrades []Grade
-
     avg := computeAverage(emptyGrades)
 
     if avg != 0 {
